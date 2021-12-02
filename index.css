@@ -1,0 +1,17 @@
+#title {
+    text-align: center;
+}
+
+table {
+    margin: 0 auto;
+    width: 40%;
+    height: 20%;
+}
+
+table, tr, td {
+    border: 1px solid black;
+}
+
+td input {
+    height: 100%;
+}
