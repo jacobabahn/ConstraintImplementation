@@ -1,3 +1,5 @@
+
+dependencies = {}
 class Constraint {
     constructor(v, val) {
         this.v = v
