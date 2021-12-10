@@ -1,38 +1,40 @@
-
-dependencies = {}
+let dependencies = {}
+let stack = []
 class Constraint {
-    constructor(v, val) {
-        this.v = v
-        this.val = val
-        this.stack = []
+    constructor() {
+        this.value = null;
+        this.valid = false
+        this.dependencies = []
+        this.eval = () => {}
+        this.raw = ""
     }
 
-    get = (v) => {
-        if (this.stack.length > 0) {
-            this.v.dependencies += stack[0]
+    get = () => {
+        if (stack.length > 0) {
+            this.dependencies += stack[stack.length - 1]
         }
-        if (!this.v.valid) {
-            this.v.valid = true
-            this.stack.push(this.v)
-            this.v.value = this.v.eval()
-            this.stack.pop()
+        if (!this.valid) {
+            this.valid = true
+            stack.push(this)
+            this.value = this.eval()
+            stack.pop()
         }
 
-        return this.v.value
+        return this.value
     }
 
-    set = (v, val) => {
-        this.v.value = this.val
-        for (let dep in this.v.dependencies) {
+    set = (val) => {
+        this.eval = val
+        for (let dep in this.dependencies) {
             if (dep.valid) {
                 invalidate(dep)
             }
         }
     }
 
-    invalidate = (v) => {
-        this.v.valid = false
-        for (let dep in this.v.dependencies) {
+    invalidate = () => {
+        this.valid = false
+        for (let dep in this.dependencies) {
             if (dep.valid) {
                 invalidate(dep)
             }
