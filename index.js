@@ -19,10 +19,14 @@ const createTable = () => {
             }
             
             input.onfocus = e => {
+                if (variable.raw) {
                 e.target.value = variable.raw
+                }
             }
             input.onblur = e => {
-                e.target.value = variable.get()
+                if (e.target.value !== "") {
+                    e.target.value = variable.get()
+                }
             }
 
             variables.push(variable)
@@ -39,7 +43,6 @@ const parse = (v, value) => {
     else {
         v.raw = value
         const operators = getOperators(value)
-        // console.log(operators)
 
         splicedVal = value
         for (let op of operators) {
@@ -50,6 +53,7 @@ const parse = (v, value) => {
         let values = []
         for (let i = 0; i < splicedVal.length; i++) {
             let variable = variables[map[splicedVal[i]]]
+            // variable.dependencies.push(v)
             values.push(variable.get())
         }
 

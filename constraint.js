@@ -25,7 +25,7 @@ class Constraint {
 
     set = (val) => {
         this.eval = val
-        for (let dep in this.dependencies) {
+        for (let dep of this.dependencies) {
             if (dep.valid) {
                 invalidate(dep)
             }
@@ -34,7 +34,7 @@ class Constraint {
 
     invalidate = () => {
         this.valid = false
-        for (let dep in this.dependencies) {
+        for (let dep of this.dependencies) {
             if (dep.valid) {
                 invalidate(dep)
             }
