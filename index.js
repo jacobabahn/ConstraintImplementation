@@ -13,19 +13,19 @@ const createTable = () => {
             td.appendChild(input)
             
             let variable = new Constraint()
-            input.onchange = e => {
-                parse(variable, e.target.value)
-                e.target.value = variable.get()
+            input.onchange = event => {
+                parse(variable, event.target.value)
+                event.target.value = variable.get()
             }
             
-            input.onfocus = e => {
-                if (variable.raw) {
-                e.target.value = variable.raw
+            input.onfocus = event => {
+                if (variable.formula) {
+                event.target.value = variable.formula
                 }
             }
-            input.onblur = e => {
-                if (e.target.value !== "") {
-                    e.target.value = variable.get()
+            input.onblur = event => {
+                if (event.target.value !== "") {
+                    event.target.value = variable.get()
                 }
             }
 
@@ -41,7 +41,7 @@ const parse = (v, value) => {
        v.set(() => { return parseInt(value)})
     }
     else {
-        v.raw = value
+        v.formula = value
         const operators = getOperators(value)
 
         splicedVal = value

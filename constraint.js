@@ -6,7 +6,7 @@ class Constraint {
         this.valid = false
         this.dependencies = []
         this.eval = () => {}
-        this.raw = ""
+        this.formula = ""
     }
 
     get = () => {
