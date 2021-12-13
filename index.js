@@ -1,7 +1,9 @@
 let variables = []
 let map = {"A1": 0, "A2": 1, "A3": 2, "B1": 3, "B2": 4, "B3": 5, "C1": 6, "C2": 7, "C3": 8}
 
-/** The createTable function builds the table, creates the constrained variables and sets the event handlers for each of them*/
+/** The createTable function builds the table, creates the constrained variables 
+ * and sets the event handlers for each of them
+ */
 const createTable = () => {
     let table = document.getElementById('table')
     for (let i = 0; i < 3; i++) {
@@ -30,6 +32,12 @@ const createTable = () => {
                 if (event.target.value !== "") {
                     event.target.value = variable.get()
                 }
+                update()
+            }
+            input.onkeydown = event => {
+                if (event.key === "Enter") {
+                    event.target.blur()
+                }
             }
 
             variables.push(variable)
@@ -40,7 +48,9 @@ const createTable = () => {
 /** The parse function takes a constrained variable and an inputted value as parameters
  *  and then sets the eval function for the constrained variable input.
  * @param {object} v - The constrained variable
- * @param {string} value - User input. Should be either a number or a formula*/
+ * @param {string} value - User input. Should be either a number or a formula
+ * @example parse(variable, "2+3")
+ * */
 const parse = (v, value) => {
     // checks for a number
     if (!isNaN(value)) {
@@ -51,6 +61,7 @@ const parse = (v, value) => {
 
     } else {
         v.formula = value
+        v.valid = false
         const operators = getOperators(value)
 
         splicedVal = value
@@ -78,7 +89,9 @@ const parse = (v, value) => {
 
 /** getOperators is a helper function for parse() that is used to find out which  operators
  * are used in the formula. The function returns an array of operators in the order that they appear.
- * param {string} value - The inputted formula value
+ * @param {string} value - The inputted formula value
+ * @returns {array} - An array of operators in the order that they appear in the formula
+ * @example getOperators("2+3*4")
 */
 const getOperators = (value) => {
     const operators = []
@@ -91,7 +104,9 @@ const getOperators = (value) => {
     return operators
 }
 
-/** update() is used to check if an input value has been changed after it has been initialized*/
+/** update() is used to check if an input value has been changed after it has been initialized.
+ * @example update()
+*/
 const update = () => {
     for (let item of variables) {
         if (item.formula) {
@@ -99,7 +114,7 @@ const update = () => {
             item.element.value = item.get()
         }
         if (!item.valid && item.value !== null) {
-            item.value = item.get()
+            item.element.value = item.get()
         }
     }
 }
