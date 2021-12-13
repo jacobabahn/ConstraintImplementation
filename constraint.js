@@ -1,12 +1,13 @@
 let dependencies = {}
 let stack = []
 class Constraint {
-    constructor() {
+    constructor(element) {
         this.value = null;
         this.valid = false
         this.dependencies = []
         this.eval = () => {}
         this.formula = ""
+        this.element = element
     }
 
     get = () => {
@@ -27,7 +28,7 @@ class Constraint {
         this.eval = val
         for (let dep of this.dependencies) {
             if (dep.valid) {
-                invalidate(dep)
+                dep.invalidate()
             }
         }
     }
@@ -36,9 +37,9 @@ class Constraint {
         this.valid = false
         for (let dep of this.dependencies) {
             if (dep.valid) {
-                invalidate(dep)
+                dep.invalidate()
             }
-            this.v.dependencies = []
         }
+        this.dependencies = []
     }
 }

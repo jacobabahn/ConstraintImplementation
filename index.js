@@ -12,10 +12,12 @@ const createTable = () => {
             const input = document.createElement('input')
             td.appendChild(input)
             
-            let variable = new Constraint()
+            let variable = new Constraint(input)
+
             input.onchange = event => {
                 parse(variable, event.target.value)
-                event.target.value = variable.get()
+                update()
+                // event.target.value = variable.get()
             }
             
             input.onfocus = event => {
@@ -23,11 +25,25 @@ const createTable = () => {
                 event.target.value = variable.formula
                 }
             }
+
             input.onblur = event => {
                 if (event.target.value !== "") {
                     event.target.value = variable.get()
                 }
             }
+
+            input.onmouseover = event => {
+                if (variable.formula) {
+                    event.target.value = variable.formula
+                }
+            }
+
+            input.onmouseleave = event => {
+                if (event.target.value !== "") {
+                    event.target.value = variable.get()
+                }
+            }
+            
 
             variables.push(variable)
             row.appendChild(td)
@@ -38,9 +54,13 @@ const createTable = () => {
 const parse = (v, value) => {
     // checks for a number
     if (!isNaN(value)) {
-       v.set(() => { return parseInt(value)})
-    }
-    else {
+        // v.value = parseInt(value)
+        value = parseInt(value)
+        v.valid = false
+        v.set(() => { return value })
+        
+
+    } else {
         v.formula = value
         const operators = getOperators(value)
 
@@ -53,7 +73,7 @@ const parse = (v, value) => {
         let values = []
         for (let i = 0; i < splicedVal.length; i++) {
             let variable = variables[map[splicedVal[i]]]
-            // variable.dependencies.push(v)
+            variable.dependencies.push(v)
             values.push(variable.get())
         }
 
@@ -63,7 +83,9 @@ const parse = (v, value) => {
             count += 2
         }
         values = values.join("")
+        // console.log(values)
         v.set(() => Function('return ' + values)())
+        // v.set(() => eval(values))
     }
 }
 
@@ -76,6 +98,18 @@ const getOperators = (value) => {
         }
     }
     return operators
+}
+
+const update = () => {
+    for (let item of variables) {
+        if (item.formula) {
+            parse(item, item.formula)
+            item.element.value = item.get()
+        }
+        if (!item.valid && item.value !== null) {
+            item.value = item.get()
+        }
+    }
 }
 
 const main = () => {
