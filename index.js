@@ -1,18 +1,41 @@
 let variables = []
-let map = {"A1": 0, "A2": 1, "A3": 2, "B1": 3, "B2": 4, "B3": 5, "C1": 6, "C2": 7, "C3": 8}
 
 /** The createTable function builds the table, creates the constrained variables 
  * and sets the event handlers for each of them
  */
 const createTable = () => {
     let table = document.getElementById('table')
-    for (let i = 0; i < 3; i++) {
-        const row = document.createElement('tr')
+    let headerRow = document.createElement('tr')
+    table.appendChild(headerRow)
+
+    for (let i = 0; i < 8; i++) {
+        if (i === 0) {
+            let header = document.createElement('th')
+            header.innerHTML = " "
+            headerRow.appendChild(header)
+        } else {
+            let header = document.createElement('th')
+            header.innerText = String.fromCharCode(65 + i - 1)
+            headerRow.appendChild(header)
+        }
+    }
+
+    for (let j = 0; j < 7; j++) {
+        let row = document.createElement('tr')
         table.appendChild(row)
-    
-        for (let j = 0; j < 3; j++) {
-            const td = document.createElement('td')
-            const input = document.createElement('input')
+        
+        let count = 0
+
+        for (let k = 0; k < 7; k++) {
+            if (count === 0) {
+                let rowHeading = document.createElement('td')
+                rowHeading.id = "rowHead"
+                rowHeading.innerText = j + 1
+                row.appendChild(rowHeading)
+            }
+
+            let td = document.createElement('td')
+            let input = document.createElement('input')
             td.appendChild(input)
             
             let variable = new Constraint(input)
@@ -42,9 +65,26 @@ const createTable = () => {
 
             variables.push(variable)
             row.appendChild(td)
+            count++
         }
     }
 }
+
+/**
+ * The buildMap function builds an object that is used to to map each
+ * input identifier to its index in the variable array.
+ */
+const buildMap = () => {
+    map = {}
+    let count = 0
+    for (let i = 0; i < 7; i++) {
+        for (let j = 0; j < 7; j++) {
+            map[String.fromCharCode(65 + j) + (i + 1)] = count
+            count++
+        }
+    }
+}
+
 /** The parse function takes a constrained variable and an inputted value as parameters
  *  and then sets the eval function for the constrained variable input.
  * @param {object} v - The constrained variable
@@ -57,8 +97,6 @@ const parse = (v, value) => {
         value = parseInt(value)
         v.valid = false
         v.set(() => { return value })
-        
-
     } else {
         v.formula = value
         v.valid = false
@@ -120,6 +158,7 @@ const update = () => {
 }
 
 const main = () => {
+    buildMap()
     createTable()
 }
 main()
