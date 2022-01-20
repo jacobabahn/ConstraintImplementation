@@ -8,6 +8,9 @@ const createTable = () => {
     let headerRow = document.createElement('tr')
     table.appendChild(headerRow)
 
+    let resetBtn = document.getElementsByClassName('button-84')[0]
+    resetBtn.addEventListener('click', reset)
+
     for (let i = 0; i < 8; i++) {
         if (i === 0) {
             let header = document.createElement('th')
@@ -155,6 +158,17 @@ const update = () => {
             item.element.value = item.get()
         }
     }
+}
+
+const reset = () => {
+    for (let item of variables) {
+        item.element.value = ""
+        item.formula = ""
+        item.valid = false
+        item.value = null
+        item.dependencies = []
+    }
+    console.log(variables)
 }
 
 const main = () => {
