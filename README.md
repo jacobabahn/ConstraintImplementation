@@ -1,7 +1,10 @@
 # Constraint Implementation
 
+Can be found at https://constraint.jacobbahn.com/
+
 ## Design
-![image](https://user-images.githubusercontent.com/64383055/145897269-4c06d9fa-2479-42d1-b4cf-545585b0ada5.png)
+<img width="1194" alt="image" src="https://user-images.githubusercontent.com/64383055/167058574-68b02848-be62-4ff3-839a-bc56d379d868.png">
+
 
 ## Usage
 In order to use the spreadsheet and test the constraints, you want to type values into at least two cells and then set a formula for the two cells in another cell. For example,
